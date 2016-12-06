@@ -6,7 +6,7 @@
 #	Use at your own risk. 
 
 #	Author:		Andrew Thomson
-#	Date:		11-14-2016
+#	Date:		11-06-2016
 
 
 #JSS_USER=""			#	Un-comment this line and add your login name if different from your os x login account.
