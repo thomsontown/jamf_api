@@ -217,7 +217,7 @@ for POLICY_PACKAGE in ${OUTDATED_POLICY_PACKAGE[@]}; do
 		
 		#	display error message and return code on error
 		if [ "$HTTP_CODE" != "201" ]; then 
-			echo "ERROR: Unable to update default distribution point. [$HTTP_CODE]"
+			echo "ERROR: Unable to update policy. [$HTTP_CODE]"
 			exit $LINENO
 		fi
 	else 
