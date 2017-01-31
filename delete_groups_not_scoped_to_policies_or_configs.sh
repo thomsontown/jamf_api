@@ -1,5 +1,19 @@
 #!/bin/sh
 
+#    This script finds all groups (static and smart) that are NOT scoped
+#    to policies or configuration profiles and display them in a list.
+#    The user is then prompted if the non-scoped groups should be deleted.
+#    If confirmed, each non-scoped group will be backed up into an xml file
+#    and delted from the JAMF PRO server. 
+
+#    Depending on how you use groups in your environment, this script can
+#    help maintaining only necessary groups. 
+
+#    Author:		Andrew Thomson
+#    Date:			12-06-2016
+#    GitHub:		https://github.com/thomsontown
+
+
 #JSS_USER=""		#	Un-comment this line and add your login name if different from your os x login account.
 #JSS_PASSWORD=""	#	Un-comment this line and add your password to prevent being prompted each time.
 PROMPT_TO_DELETE=true
