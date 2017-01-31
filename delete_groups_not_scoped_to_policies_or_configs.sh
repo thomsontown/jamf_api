@@ -9,9 +9,9 @@
 #    Depending on how you use groups in your environment, this script can
 #    help maintaining only necessary groups. 
 
-#    Author:		Andrew Thomson
-#    Date:		12-06-2016
-#    GitHub:		https://github.com/thomsontown
+#    Author:            Andrew Thomson
+#    Date:              12-06-2016
+#    GitHub:            https://github.com/thomsontown
 
 
 #JSS_USER=""		#	Un-comment this line and add your login name if different from your os x login account.
