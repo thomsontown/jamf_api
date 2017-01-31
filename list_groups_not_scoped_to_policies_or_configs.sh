@@ -4,9 +4,9 @@
 #    to policies or configuration profiles. The generated list can be helpful 
 #    in determining which groups are not being used. 
 
-#    Author:		Andrew Thomson
-#    Date:			12-06-2016
-#    GitHub:		https://github.com/thomsontown
+#    Author:            Andrew Thomson
+#    Date:              12-06-2016
+#    GitHub:            https://github.com/thomsontown
 
 
 #JSS_USER=""		#	Un-comment this line and add your login name if different from your os x login account.
