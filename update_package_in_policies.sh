@@ -42,7 +42,7 @@
 
 #    Author:        Andrew Thomson
 #    Date:          12-04-2016
-#    GitHub:		https://github.com/thomsontown
+#    GitHub:        https://github.com/thomsontown
 
 
 #JSS_USER=""		#	Un-comment this line and add your login name if different from your os x login account.
