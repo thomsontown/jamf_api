@@ -40,11 +40,15 @@
 #    JSS_PASSWORD to avoid prompting during runtime. The credentials you
 #    provide will need to have access to the APIs and to update policy records. 
 
+#    Author:        Andrew Thomson
+#    Date:          12-04-2016
+#    GitHub:        https://github.com/thomsontown
+
 
 #JSS_USER=""		#	Un-comment this line and add your login name if different from your os x login account.
 #JSS_PASSWORD=""	#	Un-comment this line and add your password to prevent being prompted each time.
 DEBUG=false
-VERSION="1.01"
+VERSION="1.02"
 
 
 #	load common source variables
@@ -154,7 +158,7 @@ for INDEX in ${!ALL_POLICIES[@]}; do
 	for POLICY_PACKAGE in ${POLICY_PACKAGES[@]}; do
 
 		#	enumerate each mactching pacakge id 
-		for MATCHING_PACKAGE in ${MATCHING_PACKAGES}; do
+		for MATCHING_PACKAGE in ${MATCHING_PACKAGES[@]}; do
 
 			#	if the current package id matches up against 
 			#	one of the package ids found in the original 
