@@ -1,17 +1,11 @@
 #!/bin/bash
 
 
-#    This script is incomplete due to the fact that not all features within our JSS
-#    are being utilized and therefore some associations will not be encoutered in
-#    our specific environment. 
+#    This script was written to delete users form the JSS. To do so, this script
+#    enumerates user associations and tries to remove them before deleting the 
+#    user object. Not ALL user associations are covered within this script becuase
+#    they are not present in our environment. 
 
-#    This script was written to delete users form the JSS. To do so, various 
-#    assocaiations may need to be stripped by the script before the user object can 
-#    be deleted. Currently only "computer", "peripherals" and "vpp assignments" 
-#    assocaiations are being stripped. 
-
-#    This script relies on the 3rd party command "xmlstarlet" for easy editing of
-#    XML data. 
 
 #    Author:        Andrew Thomson
 #    Date:          05-16-2017
@@ -32,13 +26,6 @@ function isInteger() { return `[ "$@" -eq "$@" ] 2> /dev/null`; }
 #	load common source variables
 if [ -f ~/.bash_source ]; then
 	source ~/.bash_source
-fi
-
-
-#	check for xmlstarlet
-if ! /usr/bin/which xmlstarlet &> /dev/null; then
-	(>&2 /bin/echo "ERROR: Unable to locate required command: xmlstarlet.")
-	exit $LINENO
 fi
 
 
@@ -113,64 +100,71 @@ for JUSER in ${ARGUMENTS[@]}; do
 
 	#	display debug info
 	if $DEBUG; then 
-		/bin/echo "USER ID:	$USER_ID"	
+		/bin/echo
+		/bin/echo "USER ID:	 $USER_ID"	
 		/bin/echo "COMPUTERS:       ${#COMPUTERS[@]}"
 		/bin/echo "PERIPHERALS:     ${#PERIPHERALS[@]}"
 		/bin/echo "MOBILE DEVICES:  ${#MOBILE_DEVICES[@]}"
 		/bin/echo "VPP ASSIGNMENTS: ${#VPP_ASSIGNMENTS[@]}"
 	fi
 
-
+	#	remove user association from computers
 	for COMPUTER in ${COMPUTERS[@]}; do
-		XML=`/usr/bin/curl -X GET -H "Content-Type: application/xml" -s -u "${JSS_USER}:${JSS_PASSWORD}" "${JSS_URL%/}/JSSResource/computers/id/$COMPUTER" | xmlstarlet ed -d computer/location`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer -t elem -n location`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n username`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n realname`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n real_name`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n email_address`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n position`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n phone`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n phone_number`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n department`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n building`
-		XML=`/bin/echo $XML | xmlstarlet ed -s computer/location -t elem -n room`
-		DID_UPDATE_COMPUTER=`/usr/bin/curl -X PUT -H "Content-Type: application/xml" -w "%{http_code}" -s -u "${JSS_USER}:${JSS_PASSWORD}" -o /dev/null -d "$XML" "${JSS_URL%/}/JSSResource/computers/id/$COMPUTER"`
-		if [ $DID_UPDATE_COMPUTER -eq 201 ]; then 
+		XML="<computer><general><id>$COMPUTER</id></general><location><username/><realname/><real_name/><email_address/><position/><phone/><phone_number/><department/><building/><room/></location></computer>"
+		RETURN_CODE=`/usr/bin/curl -X PUT -H "Content-Type: application/xml" -w "%{http_code}" -s -u "${JSS_USER}:${JSS_PASSWORD}" -o /dev/null -d "$XML" "${JSS_URL%/}/JSSResource/computers/id/$COMPUTER"`
+		if [ "$RETURN_CODE" -eq 201 ]; then 
 			/bin/echo " UPDATED COMPUTER ID: $COMPUTER"
 		else
 			(>&2 /bin/echo " FAILED COMPUTER ID: $COMPUTER")
 		fi
 	done
 
+	#	remove user association from peripherals
 	for PERIPHERAL in ${PERIPHERALS[@]}; do
-		XML=`/usr/bin/curl -X GET -H "Content-Type: application/xml" -s -u "${JSS_USER}:${JSS_PASSWORD}" "${JSS_URL%/}/JSSResource/computers/id/$PERIPHERAL" | xmlstarlet ed -d peripheral/location`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral -t elem -n location`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n username`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n realname`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n real_name`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n email_address`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n position`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n phone`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n phone_number`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n department`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n building`
-		XML=`/bin/echo $XML | xmlstarlet ed -s peripheral/location -t elem -n room`
-		/usr/bin/curl -X PUT -H "Content-Type: application/xml" -w "%{http_code}" -s -u "${JSS_USER}:${JSS_PASSWORD}" -d "$XML" "${JSS_URL%/}/JSSResource/peripherals/id/$PERIPHERAL -o /dev/null"
+		XML="<peripheral><general><id>$PERIPHERAL</id></general><location><username/><realname/><real_name/><email_address/><position/><phone/><phone_number/><department/><building/><room/></location></peripheral>"
+		RETURN_CODE=`/usr/bin/curl -X PUT -H "Content-Type: application/xml" -w "%{http_code}" -o /dev/null -s -u "${JSS_USER}:${JSS_PASSWORD}" -d "$XML" "${JSS_URL%/}/JSSResource/peripherals/id/$PERIPHERAL"`
+		if [ "$RETURN_CODE" -eq 201 ]; then 
+			/bin/echo " UPDATED PERIPHERAL ID: $PERIPHERAL"
+		else
+			(>&2 /bin/echo " FAILED PERIPHERAL ID: $PERIPHERAL")
+		fi
 	done
 
+	#	remove user association from mobile devices
+	for MOBILE_DEVICE in ${MOBILE_DEVICES[@]}; do
+		XML="<mobile_device><general><id>$MOBILE_DEVICE</id></general><location><username/><realname/><real_name/><email_address/><position/><phone/><phone_number/><department/><building/><room/></location></mobile_device>"
+		RETURN_CODE=`/usr/bin/curl -X PUT -H "Content-Type: application/xml" -w "%{http_code}" -o /dev/null -s -u "${JSS_USER}:${JSS_PASSWORD}" -d "$XML" "${JSS_URL%/}/JSSResource/mobiledevices/id/$MOBILE_DEVICE"`
+		if [ "$RETURN_CODE" -eq 201 ]; then 
+			/bin/echo " UPDATED MOBILE_DEVICE ID: $MOBILE_DEVICE"
+		else
+			(>&2 /bin/echo " FAILED MOBILE_DEVICE ID: $MOBILE_DEVICE")
+		fi
+	done
+
+	#	remove user association from vpp assignments
+	if [ ${#VPP_ASSIGNMENTS[@]} -ne 0 ]; then VPP_ASSIGNMENTS=(`/usr/bin/curl -X GET -H "Content-Type: application/xml" -s -u "${JSS_USER}:${JSS_PASSWORD}" "${JSS_URL%/}/JSSResource/vppassignments" 2> /dev/null | /usr/bin/xpath  "/vpp_assignments//vpp_assignment/id" 2> /dev/null | /usr/bin/awk -F'</?id>' '{for(i=2;i<=NF;i++) print $i}'`); fi
 	for VPP_ASSIGNMENT in ${VPP_ASSIGNMENTS[@]}; do
-		XML=`/usr/bin/curl -X GET -H "Content-Type: application/xml" -s -u "${JSS_USER}:${JSS_PASSWORD}" "${JSS_URL%/}/JSSResource/vppassignments/id/$VPP_ASSIGNMENT" | xmlstarlet ed -d vpp_assignment/scope/jss_users/user[id=$USER_ID]`
-		/usr/bin/curl -X PUT -H "Content-Type: application/xml" -w "%{http_code}" -s -u "${JSS_USER}:${JSS_PASSWORD}" -d "$XML" "${JSS_URL%/}/JSSResource/vppassignments/id/$VPP_ASSIGNMENT  -o /dev/null"
+		XML=`/usr/bin/curl -X GET -H "Content-Type: application/xml" -s -u "${JSS_USER}:${JSS_PASSWORD}" "${JSS_URL%/}/JSSResource/vppassignments/id/$VPP_ASSIGNMENT"`
+		USER_NODE=`/bin/echo $XML | /usr/bin/xpath "/vpp_assignment/scope/jss_users/user[id=$USER_ID]" 2> /dev/null`
+
+		#	if user found in scope then remove
+		if [ -n "$USER_NODE" ]; then
+			RETURN_CODE=`/usr/bin/curl -X PUT -H "Content-Type: application/xml" -w "%{http_code}" -o /dev/null -s -u "${JSS_USER}:${JSS_PASSWORD}" -d "${XML/$USER_NODE/}" "${JSS_URL%/}/JSSResource/vppassignments/id/$VPP_ASSIGNMENT"`
+			if [ "$RETURN_CODE" -eq 201 ]; then 
+				/bin/echo " UPDATED VPP_ASSIGNMENT ID: $VPP_ASSIGNMENT"
+
+				#	allow time for scope to recalculate
+				/bin/sleep 5 
+			fi
+		fi
 	done
 
-	if [ -n "$USER_ID" ]; then DID_DELETE=`/usr/bin/curl -X DELETE -H "Content-Type: application/xml" -w "%{http_code}" -o /dev/null -s -u "${JSS_USER}:${JSS_PASSWORD}" "${JSS_URL%/}/JSSResource/users/id/$USER_ID"`
-		if [ $DID_DELETE -eq 200 ]; then 
+	#	delete user
+	if [ -n "$USER_ID" ]; then RETURN_CODE=`/usr/bin/curl -X DELETE -H "Content-Type: application/xml" -w "%{http_code}" -o /dev/null -s -u "${JSS_USER}:${JSS_PASSWORD}" "${JSS_URL%/}/JSSResource/users/id/$USER_ID"`
+		if [ $RETURN_CODE -eq 200 ]; then 
 			/bin/echo "DELETED USER ID: $USER_ID"
 		else
 			(>&2 /bin/echo "FAILED USER ID: $USER_ID")
 		fi
 	fi
 done
-
-
-
