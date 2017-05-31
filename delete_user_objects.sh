@@ -3,7 +3,7 @@
 
 #    This script was written to delete users form the JSS. To do so, this script
 #    enumerates user associations and tries to remove them before deleting the 
-#    user object. Not ALL user associations are covered within this script becuase
+#    user object. Not ALL user associations are covered within this script because
 #    they are not present in our environment. 
 
 
