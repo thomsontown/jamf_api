@@ -41,15 +41,12 @@ def main():
 	#	enumerate policies to extract ids 
 	for policy in policiesXML.findall('policy'):
 
-		# #	print policy id and name - for bebug
-		# print policy.find('id').text, policy.find('name').text
-
+		#	query policy by id to extract script info
 		scriptsXML = queryJSS(joinURL(jssURL, 'JSSResource/policies/id',  policy.find('id').text, 'subset/scripts'))
 
 		#	if policy contains scripts then get names of scripts
 		if not scriptsXML.find('scripts/size').text == '0': 
 			for script in scriptsXML.findall('scripts/script'):
-				#print "POLICY: %s\tSCRIPT: %s" % (policy.find('name').text, script.find('name').text)
 				print '{0:<60} {1:<30} '.format(policy.find('name').text, script.find('name').text)
 
 		
