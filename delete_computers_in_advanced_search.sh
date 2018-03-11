@@ -27,7 +27,7 @@
 LAUNCH_AGENT=false
 
 
- #	load coomon source variables
+ #	load common source variables
 if [ -f ~/.bash_source ]; then
 	source ~/.bash_source
 fi
@@ -38,7 +38,7 @@ function log () {
 }
 
 
-#	determine if LaunchAgent option found
+#	parse option arguments
 while getopts ":ai:" OPT; do
 	  case $OPT in
     a)
