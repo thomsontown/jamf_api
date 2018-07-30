@@ -76,7 +76,7 @@ if [ -z $JSS_PASSWORD ]; then
 fi
 
 
-#	make sure and ID has been specified
+#	make sure an ID has been specified
 if [ -z $ADVANCED_COMPUTER_SEARCH_ID ]; then
 	echo "USAGE: ${0##*/} [-a (run script via LaunchAgent no prompting)] [-i X (provide advanced search ID number as X)]" 
 	exit $LINENO
@@ -111,7 +111,7 @@ if ! $LAUNCH_AGENT; then
 
 	CODE=$RANDOM
 	read -s -n ${#CODE} -p "To be ABSOLUTELY sure, type the CODE: $CODE to continue." VERIFY; echo -e "\r"
-	if [ $VERIFY != $CODE ]; then exit $LINENO; fi
+	if [[ $VERIFY != $CODE ]]; then exit $LINENO; fi
 else 
 	echo "Please wait . . ."
 fi
