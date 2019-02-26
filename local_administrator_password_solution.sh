@@ -17,14 +17,14 @@
 #    GitHub:          https://github.com/thomsontown
 
 
-JSS_URL=""                              							#	specify the url to your jss
-JSS_USER=""                              							#	specify jss username with write access to computer objects 
-JSS_PASSWORD=""                              						#	provide jss username password 
-RECORD_NAME="macadmin"                         						#	specify the full user name of an account to verify/create
-FORCE="$4"                              							#	specify any string as the 4th variable to force a random password update
-PASSWORD_SUFFIX="tuv"                              					#	specify a suffix added to the randomized password that will not stored in the jss database
-PASSWORD_EXTENSION_ATTRIBUTE_ID=""                              	#	specify the extension attribute id number to store the randomized password
-UPDATE_AFTER_DAYS="60"                              				#	specify after how many days to update a new randomized the pasword
+JSS_URL=""                              # specify the url to your jss
+JSS_USER=""                             # specify jss username with write access to computer objects 
+JSS_PASSWORD=""                         # provide jss username password 
+RECORD_NAME="macadmin"                  # specify the full user name of an account to verify/create
+FORCE="$4"                              # specify any string as the 4th variable to force a random password update
+PASSWORD_SUFFIX="tuv"                   # specify a suffix added to the randomized password that will not stored in the jss database
+PASSWORD_EXTENSION_ATTRIBUTE_ID=""      # specify the extension attribute id number to store the randomized password
+UPDATE_AFTER_DAYS="60"                  # specify after how many days to update a new randomized the pasword
 
 
 function isRoot () {
