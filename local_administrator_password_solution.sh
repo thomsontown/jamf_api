@@ -313,7 +313,7 @@ function main () {
 		fi
 
 		#	write last update check	
-		if ! /usr/bin/defaults write  /Library/Preferences/com.gannett.RandomAdminPassword.plist LastUpdated -string "`/bin/date +"%Y-%m-%d %H:%M:%S %z"`" 2> /dev/null; then
+		if ! /usr/bin/defaults write  /Library/Preferences/com.company.LocalAdminPasswordSolution.plist LastUpdated -string "`/bin/date +"%Y-%m-%d %H:%M:%S %z"`" 2> /dev/null; then
 			exit $LINENO
 		fi
 
@@ -325,7 +325,7 @@ function main () {
 	else
 
 		#	get last update date
-		if ! LAST_UPDATED=`/usr/bin/defaults read  /Library/Preferences/com.gannett.RandomAdminPassword.plist LastUpdated 2> /dev/null`; then
+		if ! LAST_UPDATED=`/usr/bin/defaults read  /Library/Preferences/com.company.LocalAdminPasswordSolution.plist LastUpdated 2> /dev/null`; then
 			LAST_UPDATED="2017-01-01 00:00:00 -0400"
 		fi
 
@@ -343,7 +343,7 @@ function main () {
 			fi
 
 			#	write last update check	
-			if ! /usr/bin/defaults write  /Library/Preferences/com.gannett.RandomAdminPassword.plist LastUpdated -string "`/bin/date +"%Y-%m-%d %H:%M:%S %z"`" 2> /dev/null; then
+			if ! /usr/bin/defaults write  /Library/Preferences/com.company.LocalAdminPasswordSolution.plist LastUpdated -string "`/bin/date +"%Y-%m-%d %H:%M:%S %z"`" 2> /dev/null; then
 				exit $LINENO
 			fi
 
